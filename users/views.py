@@ -25,6 +25,14 @@ class LoginView(generics.GenericAPIView):
         return Response({"token": token.key}, status=status.HTTP_200_OK)
 
 
+class LogoutView(generics.GenericAPIView):
+    def get(self, request):
+        response = Response({"message": "로그아웃 되었습니다."},
+                            status=status.HTTP_202_ACCEPTED)
+        response.delete_cookie('token')
+        return response
+
+
 class ProfileView(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
