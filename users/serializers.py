@@ -3,6 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.validators import UniqueValidator  # 중복 방지를 위해 사용
+from django.contrib.auth import authenticate
 
 
 # 회원가입 시리얼라이저
@@ -13,7 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=User.objects.all())],
     )
     password = serializers.CharField(
-        write_only=True,
+        write_only=True,  # write_only: 클라이언트 -> 서버의 역직렬화만 가능, 서버 -> 클라이언트의 직렬화는 불가능
         required=True,
         validators=[validate_password],  # 비밀번호에 대한 검증
     )
@@ -45,3 +46,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         token = Token.objects.create(user=user)
         return user
+
+
+# 로그인 시리얼라이저
+class LoginSerailizer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user:  # 사용자가 존재하면 토큰 발급
+            token = Token.objects.get(user=user)
+            return token
+        raise serializers.ValidationError(
+            {"error": "입력하신 정보에 해당하는 사용자가 존재하지 않습니다."}
+        )
