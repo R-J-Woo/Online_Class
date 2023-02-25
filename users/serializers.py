@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.validators import UniqueValidator  # 중복 방지를 위해 사용
 from django.contrib.auth import authenticate
+from .models import Profile
 
 
 # 회원가입 시리얼라이저
@@ -50,7 +51,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 # 로그인 시리얼라이저
 class LoginSerailizer(serializers.Serializer):
-    username = serializers.CharField(required=True)
+    username = serializers.CharField(required=True)  # username을 회원 아이디로 사용
     password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, data):
@@ -61,3 +62,9 @@ class LoginSerailizer(serializers.Serializer):
         raise serializers.ValidationError(
             {"error": "입력하신 정보에 해당하는 사용자가 존재하지 않습니다."}
         )
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("nickname", "image")
