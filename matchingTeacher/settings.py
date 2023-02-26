@@ -124,7 +124,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 # 미디어 파일에 대한 경로 지정
-MEDIA_URL = "/media/profile/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type

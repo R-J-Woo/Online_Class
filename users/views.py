@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from .serializers import RegisterSerializer, LoginSerailizer, ProfileSerializer
 from .models import Profile
-from .permissions import IsOwnerOrReadOnly
+from .permissions import CustomReadOnly
 
 # Create your views here.
 
@@ -36,4 +36,4 @@ class LogoutView(generics.GenericAPIView):
 class ProfileView(generics.RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [CustomReadOnly]

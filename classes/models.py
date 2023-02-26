@@ -13,7 +13,8 @@ class Class(models.Model):
     title = models.CharField(max_length=128, verbose_name="강의명")
     category = models.CharField(max_length=64, verbose_name="강의 카테고리")
     content = models.TextField(verbose_name="강의 내용")
-    thumbnail = models.ImageField(verbose_name="강의 이미지")
+    thumbnail = models.ImageField(
+        upload_to='class/', default='class/default.png', verbose_name="강의 이미지")
     student = models.ManyToManyField(
         User, verbose_name="수강생", related_name="join_classes")
     recommend = models.ManyToManyField(

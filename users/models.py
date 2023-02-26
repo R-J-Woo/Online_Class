@@ -10,7 +10,8 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True)
     nickname = models.CharField(max_length=128)
-    image = models.ImageField(upload_to='profile/', default='default.png')
+    image = models.ImageField(upload_to='profile/',
+                              default='profile/default.png')
 
 
 # User모델이 post_save 이벤트를 발생시켰을 때, 해당 user와 연결되는 profile도 동시에 생성해준다
