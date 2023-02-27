@@ -21,3 +21,6 @@ class Class(models.Model):
         User, verbose_name="추천", related_name="recommend_classes")
     register_dttm = models.DateTimeField(
         auto_now_add=True, verbose_name="수업 등록 날짜")
+
+    class Meta:
+        ordering = ['-pk']
