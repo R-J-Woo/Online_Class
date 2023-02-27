@@ -11,6 +11,7 @@ from .serializers import ClassSerializer, ClassCreateSerializer
 class ClassViewSet(viewsets.ModelViewSet):
     queryset = Class.objects.all()
     permission_classes = [CustomReadOnly]
+    filterset_fields = ['instructor', 'student', 'recommend']
 
     def get_serializer_class(self):
         if self.action == 'list' or 'retrieve':
