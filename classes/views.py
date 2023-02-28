@@ -38,3 +38,17 @@ class RecommendView(APIView):
             recommend_class.recommend.add(request.user)
 
         return Response({'status': 'ok'})
+
+
+class JoinView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        join_class = get_object_or_404(Class, id=pk)
+
+        if request.user in join_class.student.all():
+            join_class.student.remove(request.user)
+        else:
+            join_class.student.add(request.user)
+
+        return Response({'status': 'ok'})
