@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 from .permissions import CustomReadOnly
 from .models import Class
 from users.models import Profile
 from .serializers import ClassSerializer, ClassCreateSerializer
-
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 
@@ -21,3 +24,17 @@ class ClassViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         profile = Profile.objects.get(user=self.requset.user)
         serializer.save(instructor=self.request.user, profile=profile)
+
+
+class RecommendView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        recommend_class = get_object_or_404(Class, id=pk)
+
+        if request.user in recommend_class.recommend.all():
+            recommend_class.recommend.remove(request.user)
+        else:
+            recommend_class.recommend.add(request.user)
+
+        return Response({'status': 'ok'})
