@@ -1,17 +1,19 @@
 from rest_framework import serializers
 from users.serializers import ProfileSerializer
 from .models import Class
+from qna.serializers import QuestionSerializer
 
 
 class ClassSerializer(serializers.ModelSerializer):
     # profile 필드를 따로 정의하는 이유는, 이를 작성하지 않을 경우에는
     # 기본적으로 profile 필드에 profile의 pk 값만 나타나기 때문이다.
     profile = ProfileSerializer(read_only=True)  # nested serializer
+    questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Class
-        fields = ("profile", "title", "category", "content", "thumbnail",
-                  "student", "recommend", "register_dttm")
+        fields = ("pk", "profile", "title", "category", "content", "thumbnail",
+                  "student", "recommend", "register_dttm", "questions")
 
 
 # 수업을 등록할 때 user가 입력해주는 정보는 제목, 카테고리, 내용, 썸네일 정도 뿐이다.
