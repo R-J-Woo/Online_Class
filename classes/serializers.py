@@ -10,8 +10,8 @@ class ClassSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Class
-        fields = ("profile", "title", "category", "content",
-                  "thumbnail", "student", "recommend", "register_dttm")
+        fields = ("profile", "title", "category", "content", "thumbnail",
+                  "student", "recommend", "register_dttm")
 
 
 # 수업을 등록할 때 user가 입력해주는 정보는 제목, 카테고리, 내용, 썸네일 정도 뿐이다.
