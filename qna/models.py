@@ -24,7 +24,7 @@ class Answer(models.Model):
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, verbose_name="답변자 프로필")
     question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, verbose_name="관련 질문")
+        Question, related_name="answers", on_delete=models.CASCADE, verbose_name="관련 질문")
     answer_text = models.TextField(verbose_name="답변 내용")
     register_dttm = models.DateTimeField(
         auto_now_add=True, verbose_name="답변 등록 시간")
