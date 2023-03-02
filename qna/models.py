@@ -23,7 +23,7 @@ class Answer(models.Model):
         User, on_delete=models.CASCADE, verbose_name="답변자")
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE, verbose_name="답변자 프로필")
-    question = models.ForeignKey(
+    related_question = models.ForeignKey(
         Question, related_name="answers", on_delete=models.CASCADE, verbose_name="관련 질문")
     answer_text = models.TextField(verbose_name="답변 내용")
     register_dttm = models.DateTimeField(
