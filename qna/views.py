@@ -1,24 +1,37 @@
 from django.shortcuts import render
-from rest_framework import generics, mixins
+from rest_framework import viewsets
 from .models import Question, Answer
 from .serializers import QuestionSerializer, QuestionCreateSerializer, AnswerSerializer, AnswerCreateSerializer
 from classes.permissions import CustomReadOnly
 from users.models import Profile
-from .permissions import CustomReadOnly
+from .permissions import QuestionCustomReadOnly, AnswerCustomReadOnly
 
 # Create your views here.
 
 
-class QuestionView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
+class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
-    permission_classes = [CustomReadOnly]
+    permission_classes = [QuestionCustomReadOnly]
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    def get_serializer_class(self):
+        if self.action == 'list' or 'retreive':
+            return QuestionSerializer
+        return QuestionCreateSerializer
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        profile = Profile.objects.get(user=self.request.user)
+        serializer.save(questioner=self.request.user, profile=profile)
 
-    def destroy(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+
+class AnswerViewSet(viewsets.ModelViewSet):
+    queryset = Answer.objects.all()
+    permission_classes = [AnswerCustomReadOnly]
+
+    def get_serializer_class(self):
+        if self.action == 'list' or 'retreive':
+            return AnswerSerializer
+        return AnswerCreateSerializer
+
+    def perform_create(self, serializer):
+        profile = Profile.objects.get(user=self.request.user)
+        serializer.save(answerer=self.request.user, profile=profile)

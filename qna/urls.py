@@ -1,6 +1,10 @@
 from django.urls import path
-from .views import QuestionView
+from .views import QuestionViewSet, AnswerViewSet
+from rest_framework import routers
 
-urlpatterns = [
-    path('question/<int:pk>/', QuestionView.as_view()),
-]
+
+router = routers.SimpleRouter()
+router.register('questions', QuestionViewSet)
+router.register('answers', AnswerViewSet)
+
+urlpatterns = router.urls

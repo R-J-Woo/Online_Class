@@ -23,7 +23,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ("pk", "profile", "related_class",
+        fields = ("pk", "profile", "questioner", "related_class",
                   "question_title", "question_text", "answers")
 
 
