@@ -16,9 +16,9 @@ class Class(models.Model):
     thumbnail = models.ImageField(
         upload_to='class/', default='class/default.png', verbose_name="강의 이미지")
     student = models.ManyToManyField(
-        User, verbose_name="수강생", related_name="join_classes")
+        User, verbose_name="수강생", related_name="join_classes", blank=True)
     recommend = models.ManyToManyField(
-        User, verbose_name="추천", related_name="recommend_classes")
+        User, verbose_name="추천", related_name="recommend_classes", blank=True)
     register_dttm = models.DateTimeField(
         auto_now_add=True, verbose_name="수업 등록 날짜")
 

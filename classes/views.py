@@ -22,7 +22,7 @@ class ClassViewSet(viewsets.ModelViewSet):
         return ClassCreateSerializer
 
     def perform_create(self, serializer):
-        profile = Profile.objects.get(user=self.requset.user)
+        profile = Profile.objects.get(user=self.request.user)
         serializer.save(instructor=self.request.user, profile=profile)
 
 
