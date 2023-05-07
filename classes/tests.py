@@ -34,6 +34,21 @@ class ClassCreateTest(APITestCase):
         self.assertEqual(response.status_code, 201)
 
 
+# 수업 조회 테스트
+class ClassGetTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword", email="test@gmail.com")
+        self.cls = Class.objects.create(instructor=self.user, profile=Profile.objects.get(
+            user=self.user), title="test title", category="test category", content="test content", thumbnail="")
+
+    def test_read_class(self):
+        pk = self.cls.id
+        url = '/classes/' + str(pk) + '/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
 # 수업 삭제 테스트
 class ClassDeleteTest(APITestCase):
     def setUp(self):
