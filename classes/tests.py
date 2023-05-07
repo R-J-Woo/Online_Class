@@ -35,7 +35,7 @@ class ClassCreateTest(APITestCase):
 
 
 # 수업 조회 테스트
-class ClassGetTest(APITestCase):
+class ClassReadTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser", password="testpassword", email="test@gmail.com")
@@ -49,6 +49,34 @@ class ClassGetTest(APITestCase):
         self.assertEqual(response.status_code, 200)
 
 
+# 수업 정보 수정 테스트
+class ClassUpdateTest(APITestCase):
+    def setUp(self):
+        self.user_data = {"username": "testuser", "password": "testpassword"}
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword", email="test@gmail.com")
+        self.token = Token.objects.create(user=self.user)
+        self.cls = Class.objects.create(instructor=self.user, profile=Profile.objects.get(
+            user=self.user), title="test title", category="test category", content="test content", thumbnail="")
+        self.update_data = {"title": "update test title", "category": "update test category",
+                            "content": "update test content", "thumbnail": ""}
+
+    # 로그인을 안한 상태
+    def test_update_class_not_login(self):
+        pk = self.cls.id
+        url = '/classes/' + str(pk) + '/'
+        response = self.client.put(url, self.update_data)
+        self.assertEqual(response.status_code, 401)
+
+    # 로그인을 한 상태
+    def test_update_class_login(self):
+        pk = self.cls.id
+        url = '/classes/' + str(pk) + '/'
+        response = self.client.put(
+            url, self.update_data, HTTP_AUTHORIZATION="Token " + str(self.token))
+        self.assertEqual(response.status_code, 200)
+
+
 # 수업 삭제 테스트
 class ClassDeleteTest(APITestCase):
     def setUp(self):
@@ -56,7 +84,6 @@ class ClassDeleteTest(APITestCase):
         self.user = User.objects.create_user(
             username="testuser", password="testpassword", email="test@gmail.com")
         self.token = Token.objects.create(user=self.user)
-        self.profile = Profile
         self.cls = Class.objects.create(instructor=self.user, profile=Profile.objects.get(
             user=self.user), title="test title", category="test category", content="test content", thumbnail="")
 
@@ -64,7 +91,6 @@ class ClassDeleteTest(APITestCase):
     def test_delete_class_not_login(self):
         pk = self.cls.id
         url = '/classes/' + str(pk) + '/'
-        print(url)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 401)
 
